@@ -1,0 +1,14 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#graph-container {
+    position: relative;
+    display: inline-block;
+    margin: 20px;
+}
+
+#graph-canvas {
+    border: 1px solid #000;
+}
