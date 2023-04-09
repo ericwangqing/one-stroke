@@ -3,12 +3,12 @@ body {
     text-align: center;
 }
 
-#graph-container {
-    position: relative;
-    display: inline-block;
-    margin: 20px;
+canvas {
+    border: 1px solid black;
+    display: block;
+    margin: 0 auto;
 }
 
-#graph-canvas {
-    border: 1px solid #000;
+.buttons {
+    margin-top: 20px;
 }
