@@ -77,6 +77,7 @@ class App {
     this.currentVertex = null;
     this.visitedEdges = [];
 
+    this.stepsContainer = document.getElementById('stepsContainer');
     this.init();
   }
 
@@ -86,6 +87,10 @@ class App {
 
   get edgeCounter() {
     return this.graph.edges.length;
+  }
+
+  get currentEdge() {
+    return this.visitedEdges.slice(-1)[0];
   }
 
   init() {
@@ -99,6 +104,7 @@ class App {
     if (this.isDrawingMode) {
       if (!this.currentVertex) { // 开画时，先点击开始顶点
         this.currentVertex = this.findVertex(x, y);
+        this.logStep(true);
       } else {
         const clickedEdge = this.findEdge(x, y);
         if (clickedEdge) {
@@ -115,6 +121,14 @@ class App {
         this.addVertex(x, y);
       }
     }
+  }
+
+  logStep(begin=false) {
+    const step = document.createElement('li');
+    step.innerHTML = begin ?  `出发：${this.currentVertex.name}` :
+      this.currentEdge.vertex1 === this.currentVertex ? `${this.currentEdge.vertex2.name} → ${this.currentVertex.name}` :
+      `${this.currentEdge.vertex1.name} → ${this.currentVertex.name}`;
+    this.stepsContainer.appendChild(step);
   }
 
   findVertex(x, y) {
@@ -195,6 +209,7 @@ class App {
       if (this.currentVertex === vertex1 || this.currentVertex === vertex2) {
         this.visitEdge(clickedEdge);
         this.currentVertex = this.currentVertex === vertex1 ? vertex2 : vertex1;
+        this.logStep();
 
         if (this.isDrawingFinished()) {
           setTimeout(_ => alert('恭喜！你成功完成了一笔画。'), 300);
