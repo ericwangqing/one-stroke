@@ -7,8 +7,6 @@
     <list default="true" id="c1474aa5-cb05-4c9f-bb10-3fd9a9f401cb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +62,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1681048488901</updated>
-      <workItem from="1681048490216" duration="13392000" />
+      <workItem from="1681048490216" duration="14739000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现，自动一笔画，但是有问题">
       <created>1681049415795</created>
@@ -87,7 +85,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681099999458</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="增加步骤输出，便于讨论。">
+      <created>1681101766691</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1681101766691</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -97,6 +102,7 @@
     <MESSAGE value="初步实现，自动一笔画，但是有问题" />
     <MESSAGE value="完成基本游戏，可以用于上课演示" />
     <MESSAGE value="增加了顶点、边编号，便于讨论" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加了顶点、边编号，便于讨论" />
+    <MESSAGE value="增加步骤输出，便于讨论。" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加步骤输出，便于讨论。" />
   </component>
 </project>

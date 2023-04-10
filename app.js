@@ -123,11 +123,11 @@ class App {
     }
   }
 
-  logStep(begin=false) {
+  logStep(begin=false, msg='') {
     const step = document.createElement('li');
-    step.innerHTML = begin ?  `出发：${this.currentVertex.name}` :
+    step.innerHTML = msg || (begin ?  `出发：${this.currentVertex.name}` :
       this.currentEdge.vertex1 === this.currentVertex ? `${this.currentEdge.vertex2.name} → ${this.currentVertex.name}` :
-      `${this.currentEdge.vertex1.name} → ${this.currentVertex.name}`;
+      `${this.currentEdge.vertex1.name} → ${this.currentVertex.name}`);
     this.stepsContainer.appendChild(step);
   }
 
@@ -180,6 +180,7 @@ class App {
     this.visitedEdges = [];
     this.redraw();
     this.isDrawingMode = true;
+    this.logStep(false, '--- 重新开始 ---');
   }
 
   redraw() {
@@ -211,12 +212,16 @@ class App {
         this.currentVertex = this.currentVertex === vertex1 ? vertex2 : vertex1;
         this.logStep();
 
-        if (this.isDrawingFinished()) {
-          setTimeout(_ => alert('恭喜！你成功完成了一笔画。'), 300);
-        } else if (this.isDrawingFailed()) {
-          setTimeout(_ => alert('无路可走，一笔画失败。'), 300);
-        }
-      }
+        setTimeout(_ => { // wait a moment to show the last edge
+          if (this.isDrawingFinished()) {
+            alert('恭喜！你成功完成了一笔画。');
+            this.logStep(false, '--- 成功 ---')
+          } else if (this.isDrawingFailed()) {
+            alert('无路可走，一笔画失败。');
+            this.logStep(false, '--- 失败 ---')
+          }
+        }, 300)
+       }
     }
   }
 
@@ -255,6 +260,7 @@ class App {
     this.currentVertex = null;
     this.visitedEdges = [];
     this.redraw();
+    this.stepsContainer.innerHTML = '';
   }
 
   canVisit(edge) {
