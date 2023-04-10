@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c1474aa5-cb05-4c9f-bb10-3fd9a9f401cb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/one-stroke.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +36,12 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "JavaScript",
+      "IgnoreLang"
+    ]
   }
 }]]></component>
   <component name="RunManager">
@@ -63,7 +62,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1681048488901</updated>
-      <workItem from="1681048490216" duration="8286000" />
+      <workItem from="1681048490216" duration="11550000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现，自动一笔画，但是有问题">
       <created>1681049415795</created>
@@ -72,7 +71,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681049415795</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="完成基本游戏，可以用于上课演示">
+      <created>1681056973607</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1681056973607</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -80,6 +86,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="初步实现，自动一笔画，但是有问题" />
-    <option name="LAST_COMMIT_MESSAGE" value="初步实现，自动一笔画，但是有问题" />
+    <MESSAGE value="完成基本游戏，可以用于上课演示" />
+    <option name="LAST_COMMIT_MESSAGE" value="完成基本游戏，可以用于上课演示" />
   </component>
 </project>

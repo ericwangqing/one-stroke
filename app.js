@@ -21,9 +21,10 @@ class Graph {
 }
 
 class Vertex {
-  constructor(x, y) {
+  constructor(x, y, name) {
     this.x = x;
     this.y = y;
+    this.name = name;
   }
 
   draw(fillStyle = 'black') {
@@ -32,13 +33,18 @@ class Vertex {
     ctx.fillStyle = fillStyle;
     ctx.fill();
     ctx.closePath();
+
+    ctx.font = "14px Arial";
+    ctx.fillStyle = fillStyle;
+    ctx.fillText(this.name, this.x - 5, this.y - 10);
   }
 }
 
 class Edge {
-  constructor(vertex1, vertex2) {
+  constructor(vertex1, vertex2, name) {
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
+    this.name = name;
   }
 
   draw(strokeStyle = 'black') {
@@ -49,6 +55,13 @@ class Edge {
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.closePath();
+
+    const midX = (this.vertex1.x + this.vertex2.x) / 2;
+    const midY = (this.vertex1.y + this.vertex2.y) / 2;
+
+    ctx.font = "14px Arial";
+    ctx.fillStyle = strokeStyle;
+    ctx.fillText(this.name, midX - 20, midY);
   }
 }
 
@@ -65,6 +78,14 @@ class App {
     this.visitedEdges = [];
 
     this.init();
+  }
+
+  get vertexCounter() {
+    return this.graph.vertices.length;
+  }
+
+  get edgeCounter() {
+    return this.graph.edges.length;
   }
 
   init() {
@@ -115,13 +136,22 @@ class App {
   }
 
   addVertex(x, y) {
-    const vertex = new Vertex(x, y);
+    if (this.vertexCounter >= 26) {
+      alert('顶点数量已达上限(26)');
+      return;
+    }
+    const vertexName = String.fromCharCode(65 + this.vertexCounter); // 65 is ASCII code of 'A'
+    const vertex = new Vertex(x, y, vertexName);
     this.graph.addVertex(vertex);
     vertex.draw();
   }
 
   addEdge(vertex1, vertex2) {
-    const edge = new Edge(vertex1, vertex2);
+    if (this.edgeCounter >= 100) {
+      alert('边数量已达上限(100)');
+      return;
+    }
+    const edge = new Edge(vertex1, vertex2, this.edgeCounter + 1);
     this.graph.addEdge(edge);
     edge.draw();
   }
