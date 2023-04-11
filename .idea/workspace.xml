@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1474aa5-cb05-4c9f-bb10-3fd9a9f401cb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/graph.js" afterDir="false" />
+    <list default="true" id="c1474aa5-cb05-4c9f-bb10-3fd9a9f401cb" name="Changes" comment="tia">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/graph.js" beforeDir="false" afterPath="$PROJECT_DIR$/graph.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +82,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1681048488901</updated>
-      <workItem from="1681048490216" duration="24617000" />
+      <workItem from="1681048490216" duration="26518000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现，自动一笔画，但是有问题">
       <created>1681049415795</created>
@@ -133,7 +133,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681188526372</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="重构，拆分Graph和App">
+      <created>1681192197036</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1681192197036</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -147,14 +154,15 @@
     <MESSAGE value="改进步骤输出，便于讨论。" />
     <MESSAGE value="两顶点之间多条边" />
     <MESSAGE value="改为vite管理的npm包" />
-    <option name="LAST_COMMIT_MESSAGE" value="改为vite管理的npm包" />
+    <MESSAGE value="重构，拆分Graph和App" />
+    <option name="LAST_COMMIT_MESSAGE" value="重构，拆分Graph和App" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" log-message="true" suspend="NONE" type="javascript">
           <url>file://$PROJECT_DIR$/graph.js</url>
-          <line>69</line>
+          <line>76</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />
         </line-breakpoint>

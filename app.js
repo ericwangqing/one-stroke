@@ -12,7 +12,7 @@ class App {
     this.canvas = document.getElementById('drawingArea');
     this.ctx = this.canvas.getContext('2d');
 
-    this.graph = new Graph();
+    this.graph = new Graph(this.canvas, this.ctx);
     this.selectedVertices = [];
 
     this.isDrawingMode = false;
@@ -44,32 +44,64 @@ class App {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     if (this.isDrawingMode) {
-      if (!this.currentVertex) { // 开画时，先点击开始顶点
-        this.currentVertex = this.findVertex(x, y);
-        this.logStep(true);
-      } else {
-        const clickedEdge = this.findEdge(x, y);
-        if (clickedEdge) {
-          this.handleEdgeClick(clickedEdge);
-        }
-      }
-      this.drawCurrentVertexAndPossibleEdges();
+      this.drawOneStroke(x, y);
+    } else if (event.altKey) {
+      this.deleteFromGraph(x, y);
     } else {
-      const clickedVertex = this.findVertex(x, y);
+      this.drawGraph(x, y)
+    }
+  }
 
-      if (clickedVertex) {
-        this.handleVertexClick(clickedVertex);
-      } else {
-        this.addVertex(x, y);
+  deleteFromGraph(x, y) {
+    // 检查是否点击了顶点
+    const clickedVertex = this.findVertex(x, y)
+    if (clickedVertex) {
+      this.graph.edges = this.graph.edges.filter((edge) => {
+        return edge.vertex1 !== clickedVertex && edge.vertex2 !== clickedVertex;
+      });
+      this.graph.vertices = this.graph.vertices.filter((vertex) => vertex !== clickedVertex);
+      this.graph.draw();
+    } else {
+      // 检查是否点击了边
+      const clickedEdge = this.findEdge(x, y);
+      if (clickedEdge) {
+        this.graph.edges = this.graph.edges.filter((edge) => edge !== clickedEdge)
+        this.graph.vertices = this.graph.vertices.filter((vertex) => {
+          return this.graph.edges.some((edge) => edge.vertex1 === vertex || edge.vertex2 === vertex);
+        })
+        this.graph.draw();
       }
     }
   }
 
-  logStep(begin=false, msg='') {
+
+  drawGraph(x, y) {
+    const clickedVertex = this.findVertex(x, y);
+    if (clickedVertex) {
+      this.handleVertexClick(clickedVertex);
+    } else {
+      this.addVertex(x, y);
+    }
+  }
+
+  drawOneStroke(x, y) {
+    if (!this.currentVertex) { // 开画时，先点击开始顶点
+      this.currentVertex = this.findVertex(x, y);
+      this.logStep(true);
+    } else {
+      const clickedEdge = this.findEdge(x, y);
+      if (clickedEdge) {
+        this.handleEdgeClick(clickedEdge);
+      }
+    }
+    this.drawCurrentVertexAndPossibleEdges();
+  }
+
+  logStep(begin = false, msg = '') {
     const step = document.createElement('li');
-    step.innerHTML = msg || (begin ?  `出发：${this.currentVertex.name}` :
+    step.innerHTML = msg || (begin ? `出发：${this.currentVertex.name}` :
       this.currentEdge.vertex1 === this.currentVertex ? `${this.currentEdge.vertex2.name} → ${this.currentVertex.name}` :
-      `${this.currentEdge.vertex1.name} → ${this.currentVertex.name}`);
+        `${this.currentEdge.vertex1.name} → ${this.currentVertex.name}`);
     this.stepsContainer.appendChild(step);
   }
 
@@ -143,20 +175,14 @@ class App {
   restartDrawing() {
     this.currentVertex = null;
     this.visitedEdges = [];
-    this.redraw();
+    this.graph.draw();
     this.isDrawingMode = true;
     this.logStep(false, '--- 重新开始 ---');
   }
 
-  redraw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.graph.vertices.forEach(vertex => vertex.draw());
-    this.graph.edges.forEach(edge => edge.draw())
-  }
 
   findEdge(x, y) {
     const dists = this.graph.edges.map(edge => edge.pointToEdgeDistance(x, y)
-
     )
     const minDist = Math.min(...dists)
     return minDist < 5 ? this.graph.edges[dists.indexOf(minDist)] : null;
@@ -164,7 +190,7 @@ class App {
 
   handleEdgeClick(clickedEdge) {
     if (!this.visitedEdges.includes(clickedEdge)) {
-      const { vertex1, vertex2 } = clickedEdge;
+      const {vertex1, vertex2} = clickedEdge;
       if (this.currentVertex === vertex1 || this.currentVertex === vertex2) {
         this.visitEdge(clickedEdge);
         this.currentVertex = this.currentVertex === vertex1 ? vertex2 : vertex1;
@@ -179,14 +205,13 @@ class App {
             this.logStep(false, '--- 失败 ---')
           }
         }, 300)
-       }
+      }
     }
   }
 
   visitEdge(edge) {
     this.visitedEdges.push(edge);
     edge.draw('blue');
-    // redraw all non-visited edges, possible edges with black color, other impossible edges with gray color
   }
 
   drawCurrentVertexAndPossibleEdges() {
@@ -212,19 +237,20 @@ class App {
   }
 
   restartGraph() {
-    this.graph = new Graph();
+    this.graph = new Graph(this.canvas, this.ctx);
     this.selectedVertices = [];
     this.isDrawingMode = false;
     this.currentVertex = null;
     this.visitedEdges = [];
-    this.redraw();
+    this.graph.draw();
     this.stepsContainer.innerHTML = '';
   }
 
   canVisit(edge) {
-    const { vertex1, vertex2 } = edge;
+    const {vertex1, vertex2} = edge;
     return this.currentVertex === vertex1 || this.currentVertex === vertex2;
   }
+
 }
 
 const app = new App();

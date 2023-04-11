@@ -1,6 +1,8 @@
 
 class Graph {
-  constructor() {
+  constructor(canvas, ctx) {
+    this.canvas = canvas
+    this.ctx = ctx;
     this.vertices = [];
     this.edges = [];
   }
@@ -13,6 +15,11 @@ class Graph {
     this.edges.push(edge);
   }
 
+  draw() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.vertices.forEach(vertex => vertex.draw());
+    this.edges.forEach(edge => edge.draw())
+  }
   // 其他方法
 }
 

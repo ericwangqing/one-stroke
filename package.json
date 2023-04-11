@@ -1,0 +1,16 @@
+{
+  "name": "one-stroke",
+  "version": "0.1.0",
+  "description": "交互式一笔画小游戏",
+  "main": "app.js",
+  "typoe": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "author": "wangq79@mail.sysu.edu.cn",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^4.2.1"
+  }
+}
