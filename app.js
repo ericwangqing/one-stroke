@@ -27,42 +27,92 @@ class Vertex {
     this.name = name;
   }
 
-  draw(fillStyle = 'black') {
+  draw(color = 'black') {
     ctx.beginPath();
     ctx.arc(this.x, this.y, 5, 0, Math.PI * 2);
-    ctx.fillStyle = fillStyle;
+    ctx.fillStyle = color;
     ctx.fill();
     ctx.closePath();
 
     ctx.font = "14px Arial";
-    ctx.fillStyle = fillStyle;
+    ctx.fillStyle = color;
     ctx.fillText(this.name, this.x - 5, this.y - 10);
   }
 }
 
 class Edge {
-  constructor(vertex1, vertex2, name) {
+  constructor(vertex1, vertex2, name, curveFactor) {
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
     this.name = name;
+    this.curveFactor = curveFactor;
+
+    const midX = (vertex1.x + vertex2.x) / 2;
+    const midY = (vertex1.y + vertex2.y) / 2;
+    const dx = vertex2.x - vertex1.x;
+    const dy = vertex2.y - vertex1.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    this.controlPoint = {
+      x: midX + curveFactor * dy / distance,
+      y: midY - curveFactor * dx / distance,
+    };
   }
 
-  draw(strokeStyle = 'black') {
+  draw(color = 'black') {
     ctx.beginPath();
     ctx.moveTo(this.vertex1.x, this.vertex1.y);
-    ctx.lineTo(this.vertex2.x, this.vertex2.y);
-    ctx.strokeStyle = strokeStyle;
+
+    ctx.quadraticCurveTo(this.controlPoint.x, this.controlPoint.y, this.vertex2.x, this.vertex2.y);
+    ctx.strokeStyle = color;
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.closePath();
 
-    const midX = (this.vertex1.x + this.vertex2.x) / 2;
-    const midY = (this.vertex1.y + this.vertex2.y) / 2;
-
+    const labelPosition = this.getPointOnBezierCurve(0.5);
     ctx.font = "14px Arial";
-    ctx.fillStyle = strokeStyle;
-    ctx.fillText(this.name, midX - 20, midY);
+    ctx.fillStyle = color;
+    ctx.fillText(this.name, labelPosition.x - 10, labelPosition.y);
   }
+
+  /**
+   * 在贝塞尔曲线中，t 参数是一个标准化的值，范围在0到1之间。
+   * t 可以被认为是曲线上的位置，其中 t = 0 表示曲线的起点，t = 1 表示曲线的终点， t = 0.5就是弧顶。
+   */
+  getPointOnBezierCurve(t) {
+    const x = (1 - t) * (1 - t) * this.vertex1.x + 2 * (1 - t) * t * this.controlPoint.x + t * t * this.vertex2.x;
+    const y = (1 - t) * (1 - t) * this.vertex1.y + 2 * (1 - t) * t * this.controlPoint.y + t * t * this.vertex2.y;
+    return { x, y };
+  }
+
+  pointToEdgeDistance(x, y) {
+    const segments = 100;
+    let minDistance = Infinity;
+
+    for (let i = 0; i < segments; i++) {
+      const t1 = i / segments;
+      const t2 = (i + 1) / segments;
+
+      const startPoint = this.getPointOnBezierCurve(t1);
+      const endPoint = this.getPointOnBezierCurve(t2);
+
+      const dx = endPoint.x - startPoint.x;
+      const dy = endPoint.y - startPoint.y;
+      const d = Math.sqrt(dx * dx + dy * dy);
+
+      const t = ((x - startPoint.x) * dx + (y - startPoint.y) * dy) / (d * d);
+      const closestPointOnLine = t < 0 ? startPoint : t > 1 ? endPoint : {
+        x: startPoint.x + t * dx,
+        y: startPoint.y + t * dy,
+      };
+
+      const distance = Math.sqrt(Math.pow(x - closestPointOnLine.x, 2) + Math.pow(y - closestPointOnLine.y, 2));
+      minDistance = Math.min(minDistance, distance);
+    }
+
+    return minDistance;
+  }
+
 }
 
 // 具体实现游戏逻辑，例如添加顶点、边、检测点击位置等
@@ -165,12 +215,35 @@ class App {
       alert('边数量已达上限(100)');
       return;
     }
-    const edge = new Edge(vertex1, vertex2, this.edgeCounter + 1);
+
+    const existingEdges = this.graph.edges.filter(edge => (
+      (edge.vertex1 === vertex1 && edge.vertex2 === vertex2) ||
+      (edge.vertex1 === vertex2 && edge.vertex2 === vertex1)
+    ));
+    const edgeCount = existingEdges.length;
+    const scale = 40
+    const curveFactor = this.getCurveFactor(edgeCount, scale);
+
+    // const curveFactor = 40 * (1 + 2 * (existingEdges.length % 2) - 1);
+
+    const edge = new Edge(vertex1, vertex2, this.edgeCounter + 1, curveFactor);
     this.graph.addEdge(edge);
     edge.draw();
   }
 
-  // 其他方法，例如实现一笔画功能
+  /**
+   * curveFactor is scale multiply a sequence like 0, 1, -1, 2, -2, 3, -3, ...
+   * that make curves layout at both sides of the edge line
+   */
+  getCurveFactor(edgeCount, scale) {
+    // halfCurveCount is the number of curves at one side of the edge line: 1, 1, 2, 2, 3, 3, ...
+    const halfCurveCount = edgeCount % 2 === 0 ? edgeCount / 2 : (edgeCount + 1) / 2;
+    // make it into a sequence like                                         0, 1, 1, 2, 2, 3, 3 ...
+    const factor = edgeCount === 0 ? 0 : edgeCount % 2 === 0 ? -halfCurveCount : halfCurveCount;
+    return scale * factor;
+  }
+
+// 其他方法，例如实现一笔画功能
   startDrawing() {
     this.isDrawingMode = true;
   }
@@ -190,18 +263,11 @@ class App {
   }
 
   findEdge(x, y) {
-    const dists = this.graph.edges.map(edge =>
-      this.pointToLineDistance(x, y, edge.vertex1.x, edge.vertex1.y, edge.vertex2.x, edge.vertex2.y)
+    const dists = this.graph.edges.map(edge => edge.pointToEdgeDistance(x, y)
+
     )
     const minDist = Math.min(...dists)
     return minDist < 5 ? this.graph.edges[dists.indexOf(minDist)] : null;
-  }
-
-  pointToLineDistance(x, y, x1, y1, x2, y2) {
-    const A = y2 - y1;
-    const B = x1 - x2;
-    const C = x2 * y1 - x1 * y2;
-    return Math.abs(A * x + B * y + C) / Math.sqrt(Math.pow(A, 2) + Math.pow(B, 2));
   }
 
   handleEdgeClick(clickedEdge) {
