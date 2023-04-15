@@ -9,11 +9,12 @@ const restartGraphBtn = document.getElementById('restartGraph');
 
 class App {
   constructor() {
+    this.description = document.getElementById('description')
     this.canvas = document.getElementById('drawingArea');
     this.ctx = this.canvas.getContext('2d');
 
     this.graph = new Graph(this.canvas, this.ctx);
-    this.selectedVertices = [];
+    this.edgeVertices = [];
 
     this.isDrawingMode = false;
     this.currentVertex = null;
@@ -36,7 +37,25 @@ class App {
   }
 
   init() {
-    this.canvas.addEventListener('click', (event) => this.handleCanvasClick(event));
+    this.canvas.addEventListener('click', (event) => {
+      event.stopPropagation()
+      this.handleCanvasClick(event)
+    });
+
+    // make the cursor into a delete icon when
+    this.canvas.addEventListener('keydown', (event) => {
+      event.altKey && (this.canvas.style.cursor = 'not-allowed')
+    })
+    this.canvas.addEventListener('keyup', (event) => {
+      !event.altKey && (this.canvas.style.cursor = 'auto')
+    })
+
+    document.addEventListener('click', (event) => {
+      this.canvas.style.cursor = 'auto'
+      this.edgeVertices = []
+    }) // in case user click one vertex, and then click on outside
+
+    this.updateDescription()
   }
 
   handleCanvasClick(event) {
@@ -45,7 +64,9 @@ class App {
     const y = event.clientY - rect.top;
     if (this.isDrawingMode) {
       this.drawOneStroke(x, y);
+      this.updateDescription();
     } else if (event.altKey) {
+      // this.canvas.style.cursor = 'not-allowed'
       this.deleteFromGraph(x, y);
     } else {
       this.drawGraph(x, y)
@@ -78,7 +99,7 @@ class App {
   drawGraph(x, y) {
     const clickedVertex = this.findVertex(x, y);
     if (clickedVertex) {
-      this.handleVertexClick(clickedVertex);
+      this.addEdge(clickedVertex);
     } else {
       this.addVertex(x, y);
     }
@@ -109,32 +130,48 @@ class App {
     return this.graph.vertices.find(vertex => Math.sqrt(Math.pow(vertex.x - x, 2) + Math.pow(vertex.y - y, 2)) < 10);
   }
 
-  handleVertexClick(clickedVertex) {
-    if (this.selectedVertices.length === 0) {
-      this.selectedVertices.push(clickedVertex);
-    } else if (this.selectedVertices.length === 1) {
-      const vertex1 = this.selectedVertices[0];
-      const vertex2 = clickedVertex;
-
+  addEdge(clickedVertex) {
+    if (this.edgeVertices.length === 0) {
+      this.edgeVertices.push(clickedVertex)
+      this.canvas.style.cursor = 'move'
+    } else if (this.edgeVertices.length === 1) {
+      const vertex1 = this.edgeVertices[0]
+      const vertex2 = clickedVertex
       if (vertex1 !== vertex2) {
-        this.addEdge(vertex1, vertex2);
-        this.selectedVertices = [];
+        this._addEdge(vertex1, vertex2)
+        this.edgeVertices = []
+        this.canvas.style.cursor = 'auto'
       }
     }
   }
 
   addVertex(x, y) {
+    this.edgeVertices = [] // in case select a vertex for an edge, and then click on space rather than another vertex
     if (this.vertexCounter >= 26) {
       alert('顶点数量已达上限(26)');
       return;
     }
-    const vertexName = String.fromCharCode(65 + this.vertexCounter); // 65 is ASCII code of 'A'
+    const vertexName = this.getVertexName();
     const vertex = new Vertex(x, y, vertexName, this.ctx);
     this.graph.addVertex(vertex);
     vertex.draw();
   }
 
-  addEdge(vertex1, vertex2) {
+  /**
+   * find the first unused letter from A ... Z as name
+   * a vertex may be deleted, therefore new vertex should take this 'hole letter' as its name
+   */
+  getVertexName() {
+    const vertexNames = this.graph.vertices.map(({name}) => name)
+    let i  = 0, name = null
+    for (; i <= this.vertexCounter; i++) {
+      name = String.fromCharCode(65 + i)
+      if (!vertexNames.includes(name)) break
+    }
+    return name;
+  }
+
+  _addEdge(vertex1, vertex2) {
     if (this.edgeCounter >= 100) {
       alert('边数量已达上限(100)');
       return;
@@ -150,9 +187,22 @@ class App {
 
     // const curveFactor = 40 * (1 + 2 * (existingEdges.length % 2) - 1);
 
-    const edge = new Edge(vertex1, vertex2, this.edgeCounter + 1, curveFactor, this.ctx);
+    const edge = new Edge(vertex1, vertex2, this.getEdgeName(), curveFactor, this.ctx);
     this.graph.addEdge(edge);
     edge.draw();
+  }
+
+  /**
+   * find the first unused number from 1 ... 100 as name
+   * an Edge may be deleted, therefore new Edge should take this 'hole number' as its name
+   */
+  getEdgeName() {
+    const edgeNames = this.graph.edges.map(({name}) => name)
+    let name  = 0
+    for (; name <= this.edgeCounter; name++) {
+      if (!edgeNames.includes(name)) break
+    }
+    return name;
   }
 
   /**
@@ -170,6 +220,7 @@ class App {
 // 其他方法，例如实现一笔画功能
   startDrawing() {
     this.isDrawingMode = true;
+    this.updateDescription();
   }
 
   restartDrawing() {
@@ -177,6 +228,7 @@ class App {
     this.visitedEdges = [];
     this.graph.draw();
     this.isDrawingMode = true;
+    this.updateDescription();
     this.logStep(false, '--- 重新开始 ---');
   }
 
@@ -238,12 +290,13 @@ class App {
 
   restartGraph() {
     this.graph = new Graph(this.canvas, this.ctx);
-    this.selectedVertices = [];
+    this.edgeVertices = [];
     this.isDrawingMode = false;
     this.currentVertex = null;
     this.visitedEdges = [];
     this.graph.draw();
     this.stepsContainer.innerHTML = '';
+    this.updateDescription();
   }
 
   canVisit(edge) {
@@ -251,6 +304,11 @@ class App {
     return this.currentVertex === vertex1 || this.currentVertex === vertex2;
   }
 
+  updateDescription() {
+    this.description.textContent = this.isDrawingMode ?
+      !this.currentVertex ? '选择一笔画的起点' : '选择当前路径' :
+      '画图：1. 点击空白创建顶点；2.一次点击两个顶点，创建边；3. 按下Alt键，点击顶点或边，删除'
+  }
 }
 
 const app = new App();

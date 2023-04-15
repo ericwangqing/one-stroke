@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1474aa5-cb05-4c9f-bb10-3fd9a9f401cb" name="Changes" comment="tia">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="c1474aa5-cb05-4c9f-bb10-3fd9a9f401cb" name="Changes" comment="添加删除边和顶点的交互">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graph.js" beforeDir="false" afterPath="$PROJECT_DIR$/graph.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +38,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_interpreter_path": "node",
     "nodejs_package_manager_path": "pnpm",
-    "settings.editor.selected.configurable": "settings.nodejs",
+    "settings.editor.selected.configurable": "settings.codegpt",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -53,8 +53,18 @@
       <recent name="$PROJECT_DIR$/graph.js" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.dev">
+  <component name="RunManager" selected="npm.build">
     <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/one-stroke/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
       <method v="2" />
     </configuration>
     <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
@@ -70,6 +80,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.dev" />
+        <item itemvalue="npm.build" />
         <item itemvalue="JavaScript Debug.index.html" />
       </list>
     </recent_temporary>
@@ -82,7 +93,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1681048488901</updated>
-      <workItem from="1681048490216" duration="26518000" />
+      <workItem from="1681048490216" duration="27779000" />
+      <workItem from="1681291115527" duration="595000" />
+      <workItem from="1681356301851" duration="599000" />
+      <workItem from="1681467026754" duration="599000" />
+      <workItem from="1681523305360" duration="577000" />
+      <workItem from="1681524258110" duration="4966000" />
     </task>
     <task id="LOCAL-00001" summary="初步实现，自动一笔画，但是有问题">
       <created>1681049415795</created>
@@ -140,7 +156,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681192197036</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="添加删除边和顶点的交互">
+      <created>1681194077460</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1681194077460</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,7 +178,8 @@
     <MESSAGE value="两顶点之间多条边" />
     <MESSAGE value="改为vite管理的npm包" />
     <MESSAGE value="重构，拆分Graph和App" />
-    <option name="LAST_COMMIT_MESSAGE" value="重构，拆分Graph和App" />
+    <MESSAGE value="添加删除边和顶点的交互" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加删除边和顶点的交互" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -163,7 +187,6 @@
         <line-breakpoint enabled="true" log-message="true" suspend="NONE" type="javascript">
           <url>file://$PROJECT_DIR$/graph.js</url>
           <line>76</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>

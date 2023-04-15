@@ -27,7 +27,7 @@ div#app div.buttons {
 
 ol#stepsContainer {
     position: absolute;
-    top: 0;
+    top: 1em;
     right: 28em;
     width: 10em;
     text-align: left;
